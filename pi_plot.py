@@ -33,7 +33,8 @@ def plot_nthreads_time(prog, title, plot_show=False, plot_save=False, table_show
         print("\x1B[32mdone\x1B[0m")
         plt.close()
 
-    tbl = plt.table(rowLabels=n_threads, 
+    tbl = plt.table(cellText=np.array([times, pi_vals]).T,
+                    rowLabels=n_threads, 
                     colLabels=["runtime (nanoseconds)", "pi"],
                     cellLoc="center")
     plt.title(title)
