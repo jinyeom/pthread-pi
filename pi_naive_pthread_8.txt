@@ -1,0 +1,2 @@
+elapsed process CPU time = 18912629259 nanoseconds
+0.64808903444943100070
