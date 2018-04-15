@@ -36,7 +36,8 @@ def plot_nthreads_time(prog, title, show=False, save=False):
     tbl = plt.table(cellText=np.array([times, pi_vals]).T,
                     rowLabels=n_threads, 
                     colLabels=["runtime (nanoseconds)", "pi"],
-                    cellLoc="center")
+                    cellLoc="center",
+                    loc="center")
     plt.title(title)
     plt.axis("off")
     if show:
