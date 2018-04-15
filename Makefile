@@ -2,7 +2,7 @@
 CC=g++
 CFLAGS=-std=c++11
 LDFLAGS=-lpthread
-SOURCES=pi_seq.cc pi_naive.cc pi_mutex.cc pi_atomic.cc pi_fs.cc
+SOURCES=pi_seq.cc pi_naive.cc pi_mutex.cc pi_atomic.cc pi_fs.cc pi_local.cc
 BINARIES=$(patsubst %.cc,%,$(SOURCES))
 
 all: seq naive mutex atomic fs
@@ -17,6 +17,8 @@ atomic: pi_atomic.cc
 	$(CC) $(CFLAGS) -o pi_atomic pi_atomic.cc $(LDFLAGS)
 fs: pi_fs.cc
 	$(CC) $(CFLAGS) -o pi_fs pi_fs.cc $(LDFLAGS)
+local: pi_local.cc
+	$(CC) $(CFLAGS) -o pi_local pi_local.cc $(LDFLAGS)
 
 clean:
 	rm -f $(BINARIES)
