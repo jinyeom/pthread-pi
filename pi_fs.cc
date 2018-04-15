@@ -4,7 +4,7 @@
 #include <stdio.h>
 #include <stdint.h> /* for uint64  */
 #include <time.h> /* for clock_gettime */
-// #include <atomic> /*used in other parts of the assignment */
+#include <atomic> /*used in other parts of the assignment */
 
 #define MAX_THREADS 512
 
@@ -19,10 +19,9 @@ double f(double x) {
 }
 
 double pi = 0.0;
+double sum[MAX_THREADS];
 int numPoints = 1000000000;
 double step = 0.5 / numPoints;
-
-pthread_mutex_t pi_lock;
 
 int main(int argc, char *argv[]) {
 	if (argc != 2) {
@@ -32,8 +31,6 @@ int main(int argc, char *argv[]) {
 
 	pthread_attr_t attr;
 	pthread_attr_init(&attr);
-
-	pthread_mutex_init(&pi_lock, NULL);
 
 	// number of threads from the command line argument
 	// test with 1, 2, 4, and 8 threads.
@@ -46,22 +43,24 @@ int main(int argc, char *argv[]) {
 	// ---------------- experiment below ----------------
 
 	for (int i = 0; i < num_threads; ++i) {
+		// initialize local sum
+		sum[i] = 0.0;
 		// create threads 0, 1, 2, ..., numThreads (round robin)
 		short_names[i] = i;
 		pthread_create(&handles[i], &attr, compute_pi, &short_names[i]);
 	}
-
 	// join with threads when they're done
 	for (int i = 0; i < num_threads; ++i) {
 		pthread_join(handles[i], NULL);
+		pi += sum[i];
 	}
 
 	// --------------------------------------------------
 	clock_gettime(CLOCK_MONOTONIC_RAW, &tock);
 	execTime = 1000000000 * (tock.tv_sec - tick.tv_sec) + tock.tv_nsec - tick.tv_nsec;
 
-	printf("elapsed process CPU time = %llu nanoseconds\n", (long long unsigned int) execTime);
-	printf("%.20f\n", pi);
+	printf("elapsed process CPU time = %llu nanoseconds\n", (long long unsigned int)execTime);
+	printf("%.20f\n", (double)pi);
 	return 0;
 }
 
@@ -72,8 +71,6 @@ void *compute_pi(void *thread_id_ptr) {
 	for (int i = tid; i < numPoints; i += num_threads) {
 		double x = step * ((double)i);
 		double update = step * f(x);
-		pthread_mutex_lock(&pi_lock);
-		pi = pi + update;
-		pthread_mutex_unlock(&pi_lock);
+		sum[tid] += update;
 	}
 }

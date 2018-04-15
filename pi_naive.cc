@@ -1,4 +1,4 @@
-#include <pthread.h> 
+#include <pthread.h>
 #include <stdlib.h>
 #include <math.h>
 #include <stdio.h>
@@ -43,6 +43,7 @@ int main(int argc, char *argv[]) {
 
 	for (int i = 0; i < num_threads; ++i) {
 		// create threads 0, 1, 2, ..., numThreads (round robin)
+		short_names[i] = i;
 		pthread_create(&handles[i], &attr, compute_pi, &short_names[i]);
 	}
 
