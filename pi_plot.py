@@ -52,3 +52,4 @@ def plot_nthreads_time(prog, title, show=False, save=False):
 plot_nthreads_time("./pi_naive", "Naive Parallelization with Pthread", save=True)
 plot_nthreads_time("./pi_mutex", "Pthread Parallelization with Mutex", save=True)
 plot_nthreads_time("./pi_atomic", "Pthread Parallelization with Atomic Instructions", save=True)
+plot_nthreads_time("./pi_fs", "Pthread Parallelization with False-sharing", save=True)
