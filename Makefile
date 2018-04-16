@@ -5,7 +5,7 @@ LDFLAGS=-lpthread
 SOURCES=pi_seq.cc pi_naive.cc pi_mutex.cc pi_atomic.cc pi_fs.cc pi_local.cc
 BINARIES=$(patsubst %.cc,%,$(SOURCES))
 
-all: seq naive mutex atomic fs
+all: seq naive mutex atomic fs local
 
 seq: pi_seq.cc
 	$(CC) $(CFLAGS) -o pi_seq pi_seq.cc
