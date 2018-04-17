@@ -26,6 +26,7 @@ def plot_nthreads_time(prog, title, show=False, save=False):
         # second line should have the value of pi computed
         pi_vals.append(float(result.split("\n")[1]))
 
+    # plot speedups
     plt.figure()
     plt.title(title)
     plt.xlabel("number of threads")
@@ -36,21 +37,23 @@ def plot_nthreads_time(prog, title, show=False, save=False):
         plt.show()
     if save:
         print("Saving plot figure...", flush=True, end="")
-        plt.savefig("{}.png".format(title))
+        plt.savefig("{}_speedup.png".format(title))
         print("\x1B[32mdone\x1B[0m")
         plt.close()
     
+    # plot runtimes
     plt.figure()
     plt.title(title)
     plt.xlabel("number of threads")
     plt.ylabel("runtime (nanoseconds)")
+    plt.axhline(y=serial_runtime, color="r", label="serial")
     plt.plot(n_threads, times, marker="o")
     if show:
         print("Displaying the plot...")
         plt.show()
     if save:
         print("Saving plot figure...", flush=True, end="")
-        plt.savefig("{}.png".format(title))
+        plt.savefig("{}_runtime.png".format(title))
         print("\x1B[32mdone\x1B[0m")
         plt.close()
 
