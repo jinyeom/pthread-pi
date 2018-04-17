@@ -3,14 +3,14 @@ import subprocess
 import numpy as np
 from matplotlib import pyplot as plt
 
-print("Running {} in serial...".format(prog), flush=True, end="")
-result = subprocess.run([prog, str(n)], stdout=subprocess.PIPE).stdout.decode("utf-8")
+print("Computing pi in serial...", flush=True, end="")
+result = subprocess.run(["./pi_seq"], stdout=subprocess.PIPE).stdout.decode("utf-8")
 print("\x1B[32mdone\x1B[0m")
 serial_runtime = float(re.search(r"elapsed process CPU time = (.*) nanoseconds", result).group(1))
 
 def plot_nthreads_time(prog, title, show=False, save=False):
     # plot the naive pthread implemenation of computation of pi with 1, 2, 4, 8 threads
-    print("Plotting runtimes of {} with 1, 2, 4, 8 threads...".format(prog))
+    print("Plotting runtimes and speedups of {} with 1, 2, 4, 8 threads...".format(prog))
     runtimes = []
     speedups = []
     pi_vals = []
@@ -47,7 +47,8 @@ def plot_nthreads_time(prog, title, show=False, save=False):
     plt.xlabel("number of threads")
     plt.ylabel("runtime (nanoseconds)")
     plt.axhline(y=serial_runtime, color="r", label="serial")
-    plt.plot(n_threads, times, marker="o")
+    plt.plot(n_threads, runtimes, marker="o")
+    plt.legend()
     if show:
         print("Displaying the plot...")
         plt.show()
@@ -57,7 +58,7 @@ def plot_nthreads_time(prog, title, show=False, save=False):
         print("\x1B[32mdone\x1B[0m")
         plt.close()
 
-    tbl = plt.table(cellText=np.array([times, pi_vals]).T,
+    tbl = plt.table(cellText=np.array([runtimes, pi_vals]).T,
                     rowLabels=n_threads, 
                     colLabels=["runtime (nanoseconds)", "pi"],
                     cellLoc="center",
